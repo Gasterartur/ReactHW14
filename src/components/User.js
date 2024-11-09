@@ -1,9 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
+import styles from './User.module.css';
 
-const User = ({ user }) => {
+const User = () => {
+    const user = useSelector((state) => state.user);
+
     return (
-        <div>
+        <div className={styles.user}>
             <h2>User Information</h2>
             <p>Name: {user.name}</p>
             <p>Status: {user.status}</p>
@@ -11,8 +14,4 @@ const User = ({ user }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    user: state.user
-});
-
-export default connect(mapStateToProps)(User);
+export default User;

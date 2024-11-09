@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../redux/actions';
+import styles from './UserForm.module.css';
 
-const UserForm = ({ setUserInfo }) => {
+const UserForm = () => {
+    const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [status, setStatus] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUserInfo({ name, status });
+        if (name.trim() === '' || status.trim() === '') {
+            setError('Name and Status are required');
+            return;
+        }
+        dispatch(setUserInfo({ name, status }));
+        setError('');
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
             <h2>Update User Information</h2>
-            <label>
+            <label className={styles.label}>
                 Name:
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={styles.input}
+                />
             </label>
-            <label>
+            <label className={styles.label}>
                 Status:
-                <input type="text" value={status} onChange={(e) => setStatus(e.target.value)} />
+                <input
+                    type="text"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className={styles.input}
+                />
             </label>
-            <button type="submit">Update</button>
+            {error && <p className={styles.error}>{error}</p>}
+            <button type="submit" className={styles.button}>Update</button>
         </form>
     );
 };
 
-export default connect(null, { setUserInfo })(UserForm);
+export default UserForm;
